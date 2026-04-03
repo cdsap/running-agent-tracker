@@ -1,8 +1,6 @@
 # Running agent tracker
 
-Desktop utility (Compose for Desktop) that lists **AI agent CLIs that are running right now**: which binary, **PID**, **current working directory** (via `lsof` / `/proc`), and a **scheduler hint** derived from `ps` state (`R` active, `S`/`I` idle or sleeping, `T` stopped, `Z` zombie). It does **not** scan session folders on disk anymore—the focus is live processes.
-
-A **Chrome tab hint** (macOS profile state) stays at the bottom as optional context.
+Desktop utility (Compose for Desktop) that lists **AI agent CLIs that are running right now**: which binary, **PID**, **current working directory** (via `lsof` / `/proc`), and a **scheduler hint** derived from `ps` state (`R` active, `S`/`I` idle or sleeping, `T` stopped, `Z` zombie). It does **not** scan session folders on disk—the focus is live processes.
 
 ## Who gets detected
 

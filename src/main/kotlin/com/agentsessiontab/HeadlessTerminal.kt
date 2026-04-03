@@ -32,7 +32,6 @@ object HeadlessTerminal {
 
         while (true) {
             val running = listRunningAgents()
-            val chromeResult = countChromeTabs()
             val stamp = java.time.LocalTime.now().withNano(0)
 
             print(clearScreen)
@@ -61,12 +60,6 @@ object HeadlessTerminal {
                     println("    $dim pid ${a.pid} · ${a.argvPreview}$reset")
                     println()
                 }
-            }
-
-            chromeResult.onSuccess { tabs ->
-                println("  ${bold}Chrome tabs (hint)$reset  $yellow$tabs$reset")
-            }.onFailure { e ->
-                println("  ${bold}Chrome$reset     $dim${e.message}$reset")
             }
 
             println()

@@ -36,14 +36,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import java.awt.GraphicsEnvironment
-import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
-
-private val HOME_DIR = Path.of(System.getProperty("user.home"))
-private val CHROME_DIR = HOME_DIR.resolve("Library/Application Support/Google/Chrome/Default/Profile State")
 
 private fun activityColor(kind: ProcessActivityKind): Color = when (kind) {
     ProcessActivityKind.Active -> Color(0xFF2E7D32)
@@ -51,20 +47,6 @@ private fun activityColor(kind: ProcessActivityKind): Color = when (kind) {
     ProcessActivityKind.Stopped -> Color(0xFFE65100)
     ProcessActivityKind.Zombie -> Color(0xFFC62828)
     ProcessActivityKind.Unknown -> Color.Gray
-}
-
-internal fun countChromeTabs(): Result<Int> {
-    return try {
-        val cookieJar = Files.readString(CHROME_DIR)
-        val pattern = """chrome-tab://(\d+)""".toRegex()
-        Result.success(pattern.findAll(cookieJar).count())
-    } catch (e: Exception) {
-        if (e.message?.contains("No such file") == true || e is java.nio.file.NoSuchFileException) {
-            Result.success(0)
-        } else {
-            Result.failure(e)
-        }
-    }
 }
 
 @Composable
@@ -116,7 +98,6 @@ private fun RunningAgentRow(agent: RunningAgent) {
 @Composable
 fun CounterView(
     runningAgents: List<RunningAgent>,
-    chromeTabsCount: Int,
     lastUpdated: String?,
 ) {
     Card(
@@ -169,29 +150,6 @@ fun CounterView(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            Divider()
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "Chrome tabs (hint):",
-                    fontSize = 15.sp,
-                    fontWeight = if (chromeTabsCount > 0) FontWeight.Bold else FontWeight.Normal,
-                )
-                Text(
-                    text = chromeTabsCount.toString(),
-                    fontSize = 22.sp,
-                    color = Color(0xFFFF9800),
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -237,7 +195,6 @@ fun AppPreview() {
     MaterialTheme {
         CounterView(
             runningAgents = sample,
-            chromeTabsCount = 12,
             lastUpdated = "10:15 PM",
         )
     }
@@ -250,22 +207,10 @@ fun main() {
     }
     application {
         var runningAgents by remember { mutableStateOf(emptyList<RunningAgent>()) }
-        var chromeTabsCount by remember { mutableStateOf(0) }
         var lastUpdated by remember { mutableStateOf<String?>(null) }
-        var errorMessage by remember { mutableStateOf<String?>(null) }
 
         fun refreshCounts() {
             runningAgents = listRunningAgents()
-
-            countChromeTabs().onSuccess { count ->
-                chromeTabsCount = count
-                errorMessage = null
-            }.onFailure { e ->
-                if (errorMessage == null) {
-                    errorMessage = "Chrome count not available (is Chrome running?): ${e.message}"
-                }
-            }
-
             lastUpdated = java.time.LocalTime.now().withNano(0).toString()
         }
 
@@ -298,17 +243,8 @@ fun main() {
 
                         Divider()
 
-                        if (errorMessage != null) {
-                            Text(
-                                text = errorMessage!!,
-                                color = Color.Red,
-                                modifier = Modifier.padding(16.dp),
-                            )
-                        }
-
                         CounterView(
                             runningAgents = runningAgents,
-                            chromeTabsCount = chromeTabsCount,
                             lastUpdated = lastUpdated,
                         )
                     }
