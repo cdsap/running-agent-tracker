@@ -66,7 +66,17 @@ private val agentMatchers: List<Pair<Regex, String>> = listOf(
     Regex("""\b(bun|deno|node)\s+.*claude-code""", RegexOption.IGNORE_CASE) to "Claude",
     Regex("""^claude(\.exe)?(\s|$)""", RegexOption.IGNORE_CASE) to "Claude",
     Regex("""[/\\]claude(?!-desktop)(\.exe)?(\s|$)""", RegexOption.IGNORE_CASE) to "Claude",
-    Regex("""(openai\.cli\.codex|codex-cli|/bin/codex(\s|$)|/.local/bin/codex(\s|$))""", RegexOption.IGNORE_CASE) to "Codex",
+    // OpenAI Codex CLI — npm @openai/codex, rust openai.cli.codex, Homebrew/PATH `codex`
+    Regex("""@openai/codex""", RegexOption.IGNORE_CASE) to "Codex",
+    Regex("""\b(bun|deno|node|npm|npx)\s+.*@openai/codex""", RegexOption.IGNORE_CASE) to "Codex",
+    Regex("""openai\.cli\.codex""", RegexOption.IGNORE_CASE) to "Codex",
+    Regex("""\bcodex-cli\b""", RegexOption.IGNORE_CASE) to "Codex",
+    Regex("""[/\\]codex-cli""", RegexOption.IGNORE_CASE) to "Codex",
+    Regex("""^codex(\.exe)?(\s|$)""", RegexOption.IGNORE_CASE) to "Codex",
+    Regex("""[/\\]codex(\.exe)?(\s|$)""", RegexOption.IGNORE_CASE) to "Codex",
+    Regex("""/bin/codex(\s|$)""", RegexOption.IGNORE_CASE) to "Codex",
+    Regex("""/.local/bin/codex(\s|$)""", RegexOption.IGNORE_CASE) to "Codex",
+    Regex("""\b(bun|deno|node|npm|npx)\s+.*codex-cli""", RegexOption.IGNORE_CASE) to "Codex",
     // Gemini CLI — Google npm package, bare gemini on PATH, npx/bun/node, gcloud, etc.
     Regex("""@google/genai""", RegexOption.IGNORE_CASE) to "Gemini",
     Regex("""@google/gemini-cli""", RegexOption.IGNORE_CASE) to "Gemini",
