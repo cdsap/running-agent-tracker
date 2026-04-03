@@ -62,8 +62,8 @@ object HeadlessTerminal {
                     println("    $bold cwd$reset  $loc")
                     println("    ${dim}up ${a.uptime} · CPU $cpu · RSS $rss$reset")
                     println("    $dim pid ${a.pid} · ${a.argvPreview}$reset")
-                    a.configHints.forEach { h ->
-                        println("    $yellow·$reset $dim$h$reset")
+                    a.usageSummary?.let { u ->
+                        println("    $yellow transcript$reset $dim$u$reset")
                     }
                     println()
                 }
