@@ -4,7 +4,7 @@ Desktop utility (Compose for Desktop) that lists **AI agent CLIs that are runnin
 
 ## Who gets detected
 
-Processes whose command line matches heuristics in `RunningAgents.kt` (Claude, Codex, Gemini, Hermes, Cursor, etc.). Extend the regex list there for your tools.
+Processes whose command line matches heuristics in `RunningAgents.kt` (Claude, Codex, Gemini, Hermes, Cursor, etc.). Claude Code is matched on many argv shapes (`claude` on `PATH`, `@anthropic-ai/claude-code`, `node`/`npx`/`bun` wrappers, etc.); if yours still does not appear, run `ps axww | grep -i claude`, note the exact `args` column, and add a regex in `RunningAgents.kt`.
 
 **Idle / waiting** is normal: most agent processes sleep between I/O and tool calls. **Active** (`R`) may appear only briefly in a 5s snapshot.
 

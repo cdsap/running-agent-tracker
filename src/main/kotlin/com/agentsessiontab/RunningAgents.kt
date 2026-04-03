@@ -58,9 +58,14 @@ data class RunningAgent(
 private val homeDir = System.getProperty("user.home") ?: ""
 
 private val agentMatchers: List<Pair<Regex, String>> = listOf(
+    // Claude Code — argv is messy: `claude` on PATH, Homebrew path, node/bun/npx + @anthropic-ai/*, npx cache dirs
+    Regex("""@anthropic-ai/claude-code""", RegexOption.IGNORE_CASE) to "Claude",
     Regex("""claude-code""", RegexOption.IGNORE_CASE) to "Claude",
     Regex("""@anthropic-ai/claude""", RegexOption.IGNORE_CASE) to "Claude",
-    Regex("""[/]claude(?!-desktop)(\s|$)""", RegexOption.IGNORE_CASE) to "Claude",
+    Regex("""\b(bun|deno|node|npm|npx)\s+.*@anthropic-ai/claude""", RegexOption.IGNORE_CASE) to "Claude",
+    Regex("""\b(bun|deno|node)\s+.*claude-code""", RegexOption.IGNORE_CASE) to "Claude",
+    Regex("""^claude(\.exe)?(\s|$)""", RegexOption.IGNORE_CASE) to "Claude",
+    Regex("""[/\\]claude(?!-desktop)(\.exe)?(\s|$)""", RegexOption.IGNORE_CASE) to "Claude",
     Regex("""(openai\.cli\.codex|codex-cli|/bin/codex(\s|$)|/.local/bin/codex(\s|$))""", RegexOption.IGNORE_CASE) to "Codex",
     Regex("""(gemini-cli|@google/gemini|google-gemini-cli)""", RegexOption.IGNORE_CASE) to "Gemini",
     Regex("""[/]gemini(\s|$)""", RegexOption.IGNORE_CASE) to "Gemini",
