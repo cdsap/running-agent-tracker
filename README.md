@@ -48,6 +48,12 @@ If there is **no** graphical display, the app uses the terminal UI **automatical
 
 ## Example output
 
+### Desktop app
+
+![Running agent tracker — desktop UI](docs/desktop-screenshot.png)
+
+*(Placeholder: add `docs/desktop-screenshot.png` when you have the image.)*
+
 ### Terminal (CLI)
 
 Sample session (paths are illustrative; your processes and timings will differ):
@@ -96,12 +102,6 @@ Sample session (paths are illustrative; your processes and timings will differ):
     up 02:03 · CPU 0.0% · RSS 244.1 MiB
      pid 48504 · /opt/homebrew/Cellar/node/25.8.1_1/bin/node --no-warnings=DEP0040 /opt/homebrew/bin/gemini
 ```
-
-### Desktop app
-
-![Running agent tracker — desktop UI](docs/desktop-screenshot.png)
-
-*(Placeholder: add `docs/desktop-screenshot.png` when you have the image.)*
 
 ## Packaging
 
