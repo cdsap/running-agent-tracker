@@ -1,6 +1,6 @@
 # Running agent tracker
 
-Desktop utility (Compose for Desktop, dark Material 3 UI) that lists **terminal / CLI agent processes**: **PID**, **cwd**, **`ps` uptime / CPU / RSS**, and scheduler **state**. **Claude Desktop** (the `.app` GUI) is **intentionally ignored** so the list matches “what’s running in the shell.” For **Claude Code**, the app also scans **`~/.claude/projects/**/*.jsonl`**: it picks the newest transcript that mentions the process **cwd**, then reads the **last main-chain line** with `input_tokens` / `output_tokens` (skips `isSidechain:true`). That mirrors what tools like **ccusage** use; format can change between Claude Code versions.
+Desktop utility (Compose for Desktop, dark Material 3 UI) that lists **terminal / CLI agent processes**: **label**, **cwd**, **PID**, **`ps` uptime**, and **RSS**. **Claude Desktop** (the `.app` GUI) is **intentionally ignored** so the list matches “what’s running in the shell,” not the Electron app.
 
 ## Who gets detected
 

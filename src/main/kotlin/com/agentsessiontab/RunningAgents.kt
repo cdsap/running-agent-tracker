@@ -53,8 +53,6 @@ data class RunningAgent(
     val rssKiB: Long?,
     /** CPU % since process start (or last snapshot semantics per OS) from ps. */
     val cpuPercent: Double?,
-    /** Claude Code: last main-chain usage line from ~/.claude/projects JSONL when found. */
-    val usageSummary: String? = null,
 )
 
 private val homeDir = System.getProperty("user.home") ?: ""
@@ -281,11 +279,6 @@ internal fun listRunningAgents(): List<RunningAgent> {
         val label = classifyAgent(parsed.argv) ?: continue
         if (label == "Claude" && isClaudeDesktopApp(parsed.argv)) continue
         val (cwd, cwdNote) = resolveCwd(parsed.pid)
-        val usageSummary = if (label == "Claude") {
-            ClaudeTranscriptUsage.summarizeLastUsage(cwd)
-        } else {
-            null
-        }
         agents.add(
             RunningAgent(
                 label = label,
@@ -297,7 +290,6 @@ internal fun listRunningAgents(): List<RunningAgent> {
                 uptime = parsed.etime,
                 rssKiB = parsed.rssKiB,
                 cpuPercent = parsed.pcpu,
-                usageSummary = usageSummary,
             ),
         )
     }

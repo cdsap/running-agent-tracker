@@ -86,14 +86,6 @@ private fun AgentRow(agent: RunningAgent) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 6.dp),
         )
-        agent.usageSummary?.let { u ->
-            Text(
-                text = "transcript: $u",
-                fontSize = 11.sp,
-                color = Color(0xFF7DD3C0),
-                modifier = Modifier.padding(top = 6.dp),
-            )
-        }
     }
 }
 
@@ -146,7 +138,6 @@ fun AppPreview() {
             uptime = "01:42:07",
             rssKiB = 186_000L,
             cpuPercent = 1.2,
-            usageSummary = "1204 in · 89 out · ~31% context",
         ),
     )
     TrackerTheme {
