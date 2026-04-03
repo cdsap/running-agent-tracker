@@ -1,6 +1,6 @@
-# Session & tab counter
+# Agent session & tab counter
 
-Desktop utility (Compose for Desktop) that summarizes **local AI agent session activity** on your machine: how many session artifacts exist under common agent data dirs, plus **Chrome** open-tab hints and **running agent-related processes**. Useful for a quick sanity check when you have many parallel coding sessions.
+Desktop utility (Compose for Desktop) that tracks **several AI coding agents at once** — session artifacts on disk, a rough **Chrome** tab count, and **live agent CLI processes** grouped by working directory. It is **not** specific to any single vendor; Hermes is just one row alongside Claude, Codex, Gemini, and Cursor.
 
 ## Monitored agents
 
@@ -10,7 +10,7 @@ Counts are derived from paths under your home directory (defaults target **macOS
 |--------|-----------------|
 | **Hermes** | Unique session ids from `~/.hermes/sessions` and key count in `sessions.json` when present |
 | **Claude** | Direct subfolders of the Claude Code history cache |
-| **Codex** | Session-style files under `~/.codex/sessions` plus agent dirs under Hermes codex paths |
+| **Codex** | Session-style files under `~/.codex/sessions` plus agent dirs under `~/.hermes/hermes-agent/agent` when present |
 | **Gemini** | Recursive `json` / `jsonl` session files under common Gemini config locations |
 | **Cursor** | Project folders under `~/.cursor/projects` and `~/.cursor-server` |
 

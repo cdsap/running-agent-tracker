@@ -1,4 +1,4 @@
-package com.hermes.monitor
+package com.agentsessiontab
 
 import kotlin.concurrent.thread
 
@@ -20,7 +20,7 @@ object HeadlessTerminal {
     private val tux = """
         |$cyan       .___.$reset
         |$cyan      /     \ $white   ___$reset
-        |$cyan  /--|  $white(o o)$cyan  |--\ $dim  Hermes monitor$reset
+        |$cyan  /--|  $white(o o)$cyan  |--\ $dim  Agent session tab$reset
         |$cyan /   |  $white\ ^ /$cyan  |   \\
         |$cyan/    '.__$white\m/${cyan}__.'    \\
         |$cyan       /  $yellow>>$cyan  \ $yellow~~$reset$dim  ~ tux approves ~/.sessions ~$reset
@@ -40,7 +40,7 @@ object HeadlessTerminal {
             print(clearScreen)
             println(tux)
             println()
-            println("$bold$cyan══ Session & tab counter $dim(headless)$cyan ══$reset")
+            println("$bold$cyan══ Agent session & tab counter $dim(headless)$cyan ══$reset")
             println("$dim$stamp  ·  every 5s  ·  Ctrl+C to quit$reset")
             println()
 

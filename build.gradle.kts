@@ -7,7 +7,7 @@ plugins {
     id("org.jetbrains.compose") version "1.10.2"
 }
 
-group = "com.hermes.monitor"
+group = "com.agentsessiontab"
 version = "1.0.0"
 
 repositories {
@@ -24,15 +24,15 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "com.hermes.monitor.AppKt"
+        mainClass = "com.agentsessiontab.AppKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "HermesSessionTabCounter"
+            packageName = "AgentSessionTabCounter"
             packageVersion = "1.0.0"
 
             windows {
-                menuGroup = "Hermes"
+                menuGroup = "Agent session & tab counter"
                 upgradeUuid = "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
             }
         }

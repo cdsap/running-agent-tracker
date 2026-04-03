@@ -1,4 +1,4 @@
-package com.hermes.monitor
+package com.agentsessiontab
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -52,7 +51,8 @@ private val CHROME_DIR = HOME_DIR.resolve("Library/Application Support/Google/Ch
 private enum class CountStrategy {
     DIRECT_CHILD_DIRECTORIES,
     RECURSIVE_SESSION_FILES,
-    HERMES_UNIQUE_SESSIONS,
+    /** Deduplicate session ids from loose session_*.json / *.jsonl artifacts (e.g. Hermes layout). */
+    UNIQUE_SESSION_ARTIFACT_IDS,
 }
 
 private data class AgentSource(
@@ -63,13 +63,13 @@ private data class AgentSource(
 private data class AgentSpec(
     val label: String,
     val sources: List<AgentSource>,
-    /** Hermes-style index: JSON object keys = concurrent routed chats/channels. */
+    /** Optional index file: JSON object size ≈ concurrent routed entries (when the agent uses this pattern). */
     val sessionsIndexPath: Path? = null,
 )
 
 data class AgentSessionCount(
     val label: String,
-    /** Stored session artifacts on disk (unique ids for Hermes; file/dir counts otherwise). */
+    /** Stored session artifacts on disk (deduped ids when using [CountStrategy.UNIQUE_SESSION_ARTIFACT_IDS]). */
     val count: Int,
     /** Entries in `sessions.json` when present — “active” routings, not total history. */
     val activeChannels: Int? = null,
@@ -81,7 +81,7 @@ private val agentSpecs = listOf(
         sources = listOf(
             AgentSource(
                 path = HOME_DIR.resolve(".hermes/sessions"),
-                strategy = CountStrategy.HERMES_UNIQUE_SESSIONS,
+                strategy = CountStrategy.UNIQUE_SESSION_ARTIFACT_IDS,
             ),
         ),
         sessionsIndexPath = HOME_DIR.resolve(".hermes/sessions/sessions.json"),
@@ -162,7 +162,7 @@ private fun countRecursiveSessionFiles(path: Path): Int {
     }
 }
 
-private fun hermesSessionIdFromPath(path: Path): String? {
+private fun sessionArtifactIdFromPath(path: Path): String? {
     if (!isSessionFile(path)) return null
     val name = path.fileName.toString()
     return when {
@@ -176,12 +176,12 @@ private fun hermesSessionIdFromPath(path: Path): String? {
     }
 }
 
-private fun countHermesUniqueSessions(path: Path): Int {
+private fun countUniqueSessionArtifacts(path: Path): Int {
     if (!path.exists()) return 0
     val ids = mutableSetOf<String>()
     Files.walk(path).use { stream ->
         stream.filter(Files::isRegularFile).forEach { p ->
-            hermesSessionIdFromPath(p)?.let { ids.add(it) }
+            sessionArtifactIdFromPath(p)?.let { ids.add(it) }
         }
     }
     return ids.size
@@ -203,7 +203,7 @@ private fun countAgentSessions(spec: AgentSpec): Result<AgentSessionCount> {
             when (source.strategy) {
                 CountStrategy.DIRECT_CHILD_DIRECTORIES -> countDirectChildDirectories(source.path)
                 CountStrategy.RECURSIVE_SESSION_FILES -> countRecursiveSessionFiles(source.path)
-                CountStrategy.HERMES_UNIQUE_SESSIONS -> countHermesUniqueSessions(source.path)
+                CountStrategy.UNIQUE_SESSION_ARTIFACT_IDS -> countUniqueSessionArtifacts(source.path)
             }
         }
         val active: Int? = spec.sessionsIndexPath?.let { p ->
@@ -264,7 +264,7 @@ fun CounterView(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Agent & Browser Tab Counter",
+                text = "Agent session & tab counter",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
             )
@@ -456,7 +456,7 @@ fun main() {
 
     Window(
         onCloseRequest = ::exitApplication,
-        title = "Hermes Session & Tab Counter",
+        title = "Agent session & tab counter",
         state = androidx.compose.ui.window.rememberWindowState(width = 520.dp, height = 520.dp),
     ) {
         MaterialTheme {
