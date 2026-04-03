@@ -1,9 +1,10 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    kotlin("jvm") version "1.9.21"
-    kotlin("plugin.serialization") version "1.9.21"
-    id("org.jetbrains.compose") version "1.5.11"
+    kotlin("jvm") version "2.3.20"
+    kotlin("plugin.compose") version "2.3.20"
+    kotlin("plugin.serialization") version "2.3.20"
+    id("org.jetbrains.compose") version "1.10.2"
 }
 
 group = "com.hermes.monitor"
@@ -17,7 +18,8 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+    implementation(compose.materialIconsExtended)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 }
 
 compose.desktop {
